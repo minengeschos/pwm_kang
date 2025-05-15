@@ -20,11 +20,6 @@ https://www.youtube.com/watch?v=Wld4w16fotY
 
 ---
 
-## 참고 유튜브 영상
-
-[![PWM With LED Control Tutorial](https://img.youtube.com/vi/Wld4w16fotY/0.jpg)](https://www.youtube.com/watch?v=Wld4w16fotY)
-
----
 
 ## 연결 정보 및 핀 배치
 
