@@ -3,53 +3,50 @@ https://www.youtube.com/watch?v=Wld4w16fotY
 
 # PWM With LED Control Using RC Receiver (RD9S) and Arduino
 
-프로젝트 개요
-이 프로젝트는 Radiolink RC 수신기(RD9S)에서 나오는 PWM 신호를 아두이노로 읽어서, 여러 가지 LED를 제어하는 시스템입니다.
+본 프로젝트는 Radiolink RD9S RC 수신기에서 PWM 신호를 받아 아두이노를 통해 LED를 제어하는 방법을 구현합니다.  
+아래의 회로도, 송신기 사진 및 유튜브 영상 참고와 함께 자세한 설명과 코드가 포함되어 있습니다.
 
-채널 8은 On/Off 스위치 역할로 단색 LED 점멸에 사용
+---
 
-채널 6은 밝기 조절용 포텐셔미터 신호로 단색 LED 밝기 제어
+## 회로도
 
-채널 7은 색상 조절용 포텐셔미터 신호로 RGB LED 색상 변경에 사용
+![회로도](https://github.com/user-attachments/assets/c00dfb31-f525-4984-bd1d-f9002a9bd4a9)
 
-하드웨어 구성
-1) RC 수신기 핀 연결
-수신기 채널	기능	아두이노 핀 (입력)
-채널 8 (Switch A)	On/Off 스위치	D10
-채널 6 (VrA)	밝기 조절 신호	D11
-채널 7 (VrB)	색상 조절 신호	D12
+---
 
-2) LED 출력 연결
-LED 종류	기능	아두이노 핀 (출력)
-단색 LED (On/Off)	스위치 상태 표시	D2
-단색 LED (PWM)	밝기 조절용	D3
-RGB LED (공통 애노드)	색상 표현	R: D5, G: D6, B: D9
+## 송신기 사진
 
-참고: RGB LED는 공통 애노드 방식이므로 PWM 출력 신호를 반전하여 사용합니다.
+![송신기](https://github.com/user-attachments/assets/0e998258-6e91-4d66-a7db-3ed682ba79df)
 
-![회로도-1](https://github.com/user-attachments/assets/c00dfb31-f525-4984-bd1d-f9002a9bd4a9)
+---
 
-동작 원리
-PWM 신호 읽기
-RC 수신기 각 채널은 1000~2000μs 범위의 PWM 신호를 출력합니다.
-아두이노는 핀 변경 인터럽트(Pin Change Interrupt)를 이용해 상승 및 하강 엣지를 감지하여 신호의 펄스폭을 측정합니다.
+## 참고 유튜브 영상
 
-채널별 기능
+[![PWM With LED Control Tutorial](https://img.youtube.com/vi/Wld4w16fotY/0.jpg)](https://www.youtube.com/watch?v=Wld4w16fotY)
 
-채널 8: 신호가 1500μs 이상일 때 스위치 ON으로 판단하여 단색 LED를 켬
+---
 
-채널 6: 펄스폭을 0~255 PWM 값으로 변환하여 밝기 조절 LED 출력
+## 연결 정보 및 핀 배치
 
-채널 7: 펄스폭을 0~360도의 Hue 값으로 매핑하여 HSV → RGB 변환 후 RGB LED 색상 출력
+| 기능                  | RC 수신기 채널 | 아두이노 핀 번호  | 설명                                |
+|-----------------------|----------------|------------------|-----------------------------------|
+| 채널 8 (Switch A)      | 8              | D10              | On/Off 스위치 신호 입력           |
+| 채널 6 (VrA)           | 6              | D11              | 밝기 조절용 아날로그 신호 입력    |
+| 채널 7 (VrB)           | 7              | D12              | 색상 제어용 아날로그 신호 입력    |
+| On/Off LED             | -              | D2               | 채널 8 스위치 상태에 따라 LED ON/OFF |
+| 밝기 제어용 LED (PWM)  | -              | D3               | 채널 6 펄스폭에 따라 밝기 제어    |
+| RGB LED (공통 애노드)  | -              | D5(Red), D6(Green), D9(Blue) | 채널 7 값에 따라 색상 제어 (HSV → RGB 변환) |
 
-HSV to RGB 변환
-색상 조절을 위해 Hue(0~360도), Saturation(채도), Value(명도)를 RGB 신호로 변환하는 함수가 구현되어 있습니다.
-이 프로젝트에서는 항상 채도 1, 명도 1로 최대 밝기 색상을 표현합니다.
+---
 
-PWM 반전 처리
-공통 애노드 RGB LED 특성상, PWM 출력 값은 255에서 계산된 RGB 값을 빼서 출력합니다.
+## 기능 설명
 
-시리얼 모니터 출력
-디버깅 용도로 각 채널의 펄스폭과 밝기, Hue 값을 주기적으로 출력합니다.
+- RC 수신기 RD9S의 서보 커넥터에서 채널 8, 6, 7 신호를 각각 디지털 입력으로 받아 핀 변경 인터럽트(Pin Change Interrupt)를 사용해 PWM 펄스폭을 측정합니다.
+- 채널 8은 On/Off 스위치 역할로, 이 신호에 따라 D2 핀에 연결된 단색 LED가 켜지거나 꺼집니다.
+- 채널 6의 펄스폭을 아두이노에서 PWM 밝기 값(0~255)으로 변환해 D3 핀에 연결된 LED 밝기를 조절합니다.
+- 채널 7 신호는 HSV 색상환의 Hue 값(0~360도)으로 매핑되며, HSV→RGB 변환 후 공통 애노드 RGB LED의 색상을 제어합니다.
+- HSV → RGB 변환은 Hue 값에 따라 RGB 색상을 계산하고, 공통 애노드 특성상 PWM 신호를 반전시켜 출력합니다.
+
+---
 
 ![송신기](https://github.com/user-attachments/assets/0e998258-6e91-4d66-a7db-3ed682ba79df)
