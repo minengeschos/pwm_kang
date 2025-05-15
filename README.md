@@ -1,7 +1,8 @@
 youbute 영상:
 https://www.youtube.com/watch?v=Wld4w16fotY
 
-#PWM With LED Control Using RC Receiver (RD9S) and Arduino
+# PWM With LED Control Using RC Receiver (RD9S) and Arduino
+
 프로젝트 개요
 이 프로젝트는 Radiolink RC 수신기(RD9S)에서 나오는 PWM 신호를 아두이노로 읽어서, 여러 가지 LED를 제어하는 시스템입니다.
 
