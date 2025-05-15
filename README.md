@@ -59,4 +59,3 @@ https://www.youtube.com/watch?v=Wld4w16fotY
 
 ---
 
-![송신기](https://github.com/user-attachments/assets/0e998258-6e91-4d66-a7db-3ed682ba79df)
